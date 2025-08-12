@@ -10,6 +10,12 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
+        /* 검색 결과 항목 스타일 */
+        .result-item {
+            font-size: 1.25rem; /* 글씨 크기를 키웁니다 (text-xl) */
+            font-weight: bold; /* 폰트 굵기를 굵게 합니다 */
+            text-align: center; /* 텍스트를 가운데 정렬합니다 */
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -414,37 +420,33 @@
             ];
 
             const handleSearch = () => {
-                // 입력값의 앞뒤 공백을 제거하고 소문자로 변환
                 const address = addressInput.value.trim().toLowerCase();
                 
                 if (address === "") {
-                    resultList.innerHTML = `<p class="text-gray-800">주소를 입력해주세요.</p>`;
+                    resultList.innerHTML = `<p class="text-gray-800 text-center">주소를 입력해주세요.</p>`;
                     resultsDiv.classList.remove('hidden');
                     return;
                 }
 
-                // UI 업데이트
                 loadingIndicator.classList.remove('hidden');
                 searchButton.disabled = true;
                 resultsDiv.classList.add('hidden');
 
-                // 주소의 일부가 포함되는지 확인하는 유연한 검색 로직
                 const matchedResults = addressData.filter(item => item[0].toLowerCase().includes(address));
                 
-                // 검색 완료 후 UI 업데이트
                 loadingIndicator.classList.add('hidden');
                 searchButton.disabled = false;
                 resultsDiv.classList.remove('hidden');
                 
                 if (matchedResults.length > 0) {
                     resultList.innerHTML = matchedResults.map(result => `
-                        <p class="mb-2 p-2 bg-white rounded-md border border-gray-100">
-                            <span class="font-bold text-gray-900">${result[0]}</span><br>
-                            구역번호: <span class="font-semibold text-blue-600">${result[1]}</span>
+                        <p class="mb-2 p-2 bg-white rounded-md border border-gray-100 result-item">
+                            <span class="font-semibold text-gray-900">${result[0]}</span><br>
+                            구역번호: <span class="font-bold text-blue-600">${result[1]}</span>
                         </p>
                     `).join('');
                 } else {
-                    resultList.innerHTML = `<p class="text-red-500 font-medium">"${addressInput.value.trim()}"에 대한 구역번호를 찾을 수 없습니다.</p>`;
+                    resultList.innerHTML = `<p class="text-red-500 font-medium text-center">"${addressInput.value.trim()}"에 대한 구역번호를 찾을 수 없습니다.</p>`;
                 }
             };
 
