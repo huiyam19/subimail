@@ -12,9 +12,17 @@
         }
         /* 검색 결과 항목 스타일 */
         .result-item {
-            font-size: 50px; /* 글씨 크기를 50포인트로 설정합니다 */
-            font-weight: bold; /* 폰트 굵기를 굵게 합니다 */
-            text-align: center; /* 텍스트를 가운데 정렬합니다 */
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+        }
+        /* 주소 텍스트 색상 */
+        .address-text {
+            color: #2563eb; /* 파란색 */
+        }
+        /* 구역번호 텍스트 색상 */
+        .zone-number-text {
+            color: #ef4444; /* 빨간색 */
         }
     </style>
 </head>
@@ -441,8 +449,8 @@
                 if (matchedResults.length > 0) {
                     resultList.innerHTML = matchedResults.map(result => `
                         <p class="mb-2 p-2 bg-white rounded-md border border-gray-100 result-item">
-                            <span class="font-semibold text-gray-900">${result[0]}</span><br>
-                            구역번호: <span class="font-bold text-blue-600">${result[1]}</span>
+                            <span class="font-semibold address-text">${result[0]}</span><br>
+                            구역번호: <span class="font-bold zone-number-text">${result[1]}</span>
                         </p>
                     `).join('');
                 } else {
