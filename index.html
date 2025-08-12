@@ -418,37 +418,37 @@
             const handleSearch = () => {
                 const address = addressInput.value.trim().toLowerCase();
                 
-                if (address === "") {
-                    resultList.innerHTML = `<p class="text-gray-800 text-center">주소를 입력해주세요.</p>`;
-                    resultsDiv.classList.remove('hidden');
-                    return;
-                }
-
+                // **수정: 검색 시작 시 기존 결과를 먼저 지우고, 로딩 인디케이터를 보입니다.**
+                resultList.innerHTML = ''; 
+                resultsDiv.classList.add('hidden');
                 loadingIndicator.classList.remove('hidden');
                 searchButton.disabled = true;
 
-                // 기존 결과를 먼저 숨겨서 로딩 상태를 명확히 함
-                resultsDiv.classList.add('hidden');
+                // 검색 로직을 지연시켜 로딩 상태를 확실히 보여줍니다.
+                setTimeout(() => {
+                    const matchedResults = addressData.filter(item => item[0].toLowerCase().includes(address));
+                    
+                    // **수정: 검색 완료 후 로딩 인디케이터를 숨기고, 결과창을 보이게 합니다.**
+                    loadingIndicator.classList.add('hidden');
+                    searchButton.disabled = false;
+                    resultsDiv.classList.remove('hidden');
 
-                const matchedResults = addressData.filter(item => item[0].toLowerCase().includes(address));
-                
-                // 검색이 완료되면 로딩 상태 해제
-                loadingIndicator.classList.add('hidden');
-                searchButton.disabled = false;
-                
-                // 결과 영역을 다시 보이게 함
-                resultsDiv.classList.remove('hidden');
-
-                if (matchedResults.length > 0) {
-                    resultList.innerHTML = matchedResults.map(result => `
-                        <p class="mb-2 p-2 bg-white rounded-md border border-gray-100 font-bold text-center">
-                            <span style="color: #2563eb;">${result[0]}</span><br>
-                            구역번호: <span style="color: #ef4444;">${result[1]}</span>
-                        </p>
-                    `).join('');
-                } else {
-                    resultList.innerHTML = `<p class="text-red-500 font-medium text-center">"${addressInput.value.trim()}"에 대한 구역번호를 찾을 수 없습니다.</p>`;
-                }
+                    if (address === "") {
+                        resultList.innerHTML = `<p class="text-gray-800 text-center">주소를 입력해주세요.</p>`;
+                        return;
+                    }
+                    
+                    if (matchedResults.length > 0) {
+                        resultList.innerHTML = matchedResults.map(result => `
+                            <p class="mb-2 p-2 bg-white rounded-md border border-gray-100 font-bold text-center">
+                                <span style="color: #2563eb;">${result[0]}</span><br>
+                                구역번호: <span style="color: #ef4444;">${result[1]}</span>
+                            </p>
+                        `).join('');
+                    } else {
+                        resultList.innerHTML = `<p class="text-red-500 font-medium text-center">"${addressInput.value.trim()}"에 대한 구역번호를 찾을 수 없습니다.</p>`;
+                    }
+                }, 500); // 0.5초 지연
             };
 
             searchButton.addEventListener('click', handleSearch);
